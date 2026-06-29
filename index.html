@@ -26,10 +26,10 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 1; /* Sits beneath the loading indicator */
+        z-index: 1;
       }
 
-      /* Minimalist center-screen dot indicator */
+      /* Animated pulsing center-screen dot indicator */
       #loading-dot {
         position: absolute;
         top: 50%;
@@ -37,11 +37,21 @@
         transform: translate(-50%, -50%);
         color: #fff;
         font-family: monospace;
-        font-size: 24px;
+        font-size: 28px;
         font-weight: bold;
-        z-index: 2; /* Keeps it strictly above the blacked-out canvas */
+        z-index: 2; 
         user-select: none;
         pointer-events: none;
+        
+        /* Smooth breathing/pulsing animation loop */
+        animation: pulse 1.4s infinite ease-in-out;
+      }
+
+      /* The animation sequence that keeps the page feeling alive */
+      @keyframes pulse {
+        0% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.8); }
+        50% { opacity: 1.0; transform: translate(-50%, -50%) scale(1.2); }
+        100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.8); }
       }
 
       /* Hard-suppresses default engine logo containers or progress elements */
@@ -66,7 +76,6 @@
       var canvas = document.querySelector("#unity-canvas");
       var loadingDot = document.querySelector("#loading-dot");
 
-      // Automatically configure the viewport scales if mobile is active
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         var meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -88,16 +97,15 @@
           console.warn(msg);
         }
       }).then((unityInstance) => {
-        // --- THE TIMED BLINDFOLD & REMOVAL ---
+        // --- TIMED REVEAL ---
+        // Dropped to 1200ms to tighten up the load time while keeping the splash hidden
         setTimeout(() => {
-          // 1. Remove the filter to let the game instantly cut in
           canvas.style.setProperty("filter", "none", "important");
           
-          // 2. Clear the loading dot entirely so the viewport is pristine
           if (loadingDot) {
             loadingDot.remove();
           }
-        }, 2000); 
+        }, 1200); 
         
       }).catch((message) => {
         alert(message);
