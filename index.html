@@ -18,6 +18,22 @@
         width: 100vw !important;
         height: 100vh !important;
         display: block;
+        background: #000 !important; 
+        
+        /* --- THE HTML KILL SWITCH --- */
+        /* Forces everything inside the canvas buffer to render completely black. */
+        filter: brightness(0) !important; 
+      }
+
+      /* Hard-suppresses default engine logo containers or progress elements */
+      #unity-loading-bar, 
+      .unity-mobile #unity-loading-bar, 
+      #unity-logo, 
+      .webgl-logo,
+      .unity-splash {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
       }
     </style>
   </head>
@@ -26,6 +42,8 @@
 
     <script src="Build/WebBuild.loader.js"></script>
     <script>
+      var canvas = document.querySelector("#unity-canvas");
+
       // Automatically configure the viewport scales if mobile is active
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         var meta = document.createElement('meta');
@@ -34,7 +52,7 @@
         document.getElementsByTagName('head')[0].appendChild(meta);
       }
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
+      createUnityInstance(canvas, {
         arguments: [],
         dataUrl: "Build/WebBuild.data.unityweb",
         frameworkUrl: "Build/WebBuild.framework.js.unityweb",
@@ -43,11 +61,14 @@
         companyName: "DefaultCompany",
         productName: "levant",
         productVersion: "0.1.0",
-        // Bypasses the default mobile warning overlay entirely
         warningWindow: (msg) => {
           if (msg.indexOf("is not supported on mobile") !== -1) return;
           console.warn(msg);
         }
+      }).then((unityInstance) => {
+        // --- THE INSTANT CUT-IN ---
+        // Once Unity finishes compiling, instantly restore normal colors so the game pops on screen.
+        canvas.style.setProperty("filter", "none", "important");
       }).catch((message) => {
         alert(message);
       });
