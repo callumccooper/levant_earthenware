@@ -20,8 +20,7 @@
         display: block;
         background: #000 !important; 
         
-        /* --- THE HTML KILL SWITCH --- */
-        /* Forces everything inside the canvas buffer to render completely black. */
+        /* Forces everything inside the canvas buffer to render completely black */
         filter: brightness(0) !important; 
       }
 
@@ -66,9 +65,13 @@
           console.warn(msg);
         }
       }).then((unityInstance) => {
-        // --- THE INSTANT CUT-IN ---
-        // Once Unity finishes compiling, instantly restore normal colors so the game pops on screen.
-        canvas.style.setProperty("filter", "none", "important");
+        // --- THE TIMED BLINDFOLD ---
+        // Wait 2000 milliseconds (2 seconds) after loading finishes 
+        // to give the splash screen time to die in the dark.
+        setTimeout(() => {
+          canvas.style.setProperty("filter", "none", "important");
+        }, 2000); 
+        
       }).catch((message) => {
         alert(message);
       });
