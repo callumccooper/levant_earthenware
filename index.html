@@ -13,7 +13,6 @@
         overflow: hidden; /* Strips away web scrollbars */
         padding: 0;
         margin: 0;
-        position: relative;
       }
       #unity-canvas {
         width: 100vw !important;
@@ -23,35 +22,6 @@
         
         /* Forces everything inside the canvas buffer to render completely black */
         filter: brightness(0) !important; 
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1;
-      }
-
-      /* Animated pulsing center-screen dot indicator */
-      #loading-dot {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #fff;
-        font-family: monospace;
-        font-size: 28px;
-        font-weight: bold;
-        z-index: 2; 
-        user-select: none;
-        pointer-events: none;
-        
-        /* Smooth breathing/pulsing animation loop */
-        animation: pulse 1.4s infinite ease-in-out;
-      }
-
-      /* The animation sequence that keeps the page feeling alive */
-      @keyframes pulse {
-        0% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.8); }
-        50% { opacity: 1.0; transform: translate(-50%, -50%) scale(1.2); }
-        100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.8); }
       }
 
       /* Hard-suppresses default engine logo containers or progress elements */
@@ -67,15 +37,13 @@
     </style>
   </head>
   <body>
-    <div id="loading-dot">.</div>
-
     <canvas id="unity-canvas" tabindex="-1"></canvas>
 
     <script src="Build/WebBuild.loader.js"></script>
     <script>
       var canvas = document.querySelector("#unity-canvas");
-      var loadingDot = document.querySelector("#loading-dot");
 
+      // Automatically configure the viewport scales if mobile is active
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         var meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -97,15 +65,12 @@
           console.warn(msg);
         }
       }).then((unityInstance) => {
-        // --- TIMED REVEAL ---
-        // Dropped to 1200ms to tighten up the load time while keeping the splash hidden
+        // --- THE TIMED BLINDFOLD ---
+        // Wait 2000 milliseconds (2 seconds) after loading finishes 
+        // to give the splash screen time to die in the dark.
         setTimeout(() => {
           canvas.style.setProperty("filter", "none", "important");
-          
-          if (loadingDot) {
-            loadingDot.remove();
-          }
-        }, 1200); 
+        }, 2000); 
         
       }).catch((message) => {
         alert(message);
