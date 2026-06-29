@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Levant_Earthenware</title>
+    <style>
+      /* Force the gallery to fill the entire browser window beautifully */
+      html, body {
+        background: #000; /* Deep black background layer */
+        width: 100%;
+        height: 100%;
+        overflow: hidden; /* Strips away web scrollbars */
+        padding: 0;
+        margin: 0;
+      }
+      #unity-canvas {
+        width: 100vw !important;
+        height: 100vh !important;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
 
+    <script src="Build/Build2.loader.js"></script>
+    <script>
+      // Automatically configure the viewport scales if mobile is active
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+      }
+
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        arguments: [],
+        dataUrl: "Build/Build2.data.unityweb",
+        frameworkUrl: "Build/Build2.framework.js.unityweb",
+        codeUrl: "Build/Build2.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "webgallery",
+        productVersion: "0.1.0",
+        // Bypasses the default mobile warning overlay entirely
+        warningWindow: (msg) => {
+          if (msg.indexOf("is not supported on mobile") !== -1) return;
+          console.warn(msg);
+        }
+      }).catch((message) => {
+        alert(message);
+      });
+    </script>
+  </body>
+</html>
