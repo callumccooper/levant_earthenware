@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Levant_Earthenware</title>
+    <title>levant</title>
     <style>
       /* Force the gallery to fill the entire browser window beautifully */
       html, body {
@@ -24,7 +24,7 @@
   <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
 
-    <script src="Build/Build2.loader.js"></script>
+    <script src="Build/WebBuild.loader.js"></script>
     <script>
       // Automatically configure the viewport scales if mobile is active
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -36,12 +36,12 @@
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         arguments: [],
-        dataUrl: "Build/Build2.data.unityweb",
-        frameworkUrl: "Build/Build2.framework.js.unityweb",
-        codeUrl: "Build/Build2.wasm.unityweb",
+        dataUrl: "Build/WebBuild.data.unityweb",
+        frameworkUrl: "Build/WebBuild.framework.js.unityweb",
+        codeUrl: "Build/WebBuild.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "webgallery",
+        productName: "levant",
         productVersion: "0.1.0",
         // Bypasses the default mobile warning overlay entirely
         warningWindow: (msg) => {
